@@ -1,0 +1,36 @@
+# Created by Lucas Goncalves Nadalete
+version: '3.1'
+services:
+  testlink:
+    build:
+      dockerfile: ./docker/testlink.dockerfile
+      context: .
+    image: lookyller/testlink
+    container_name: testlink
+    environment:
+      - DB_TYPE=mysql
+      - DB_USER=testlink
+      - DB_PASS=testlink@tech!@#
+      - DB_HOST=35.236.246.120
+      - DB_NAME=testlink
+      - DB_TABLE_PREFIX=
+      - SMTP_ENABLE=true
+      - SMTP_HOST=
+      - SMTP_PORT=
+      - SMTP_USER= #user@atech.com.br
+      - SMTP_PASSWORD=
+      - SMTP_CONNECTION_MODE=tls # ''| ssl | tls
+      - PATH_TESTLINK_LOG=/var/testlink/logs/
+      - PATH_TESTLINK_UPLOAD_AREA=/var/testlink/upload_area/
+      - CHECK_WARNING_MODE=SILENT #SILENT | FILE | SCREEN
+      - DEFAULT_LANGUAGE=en-US
+      - SESSION_INACTIVITY_TIMEOUT=300
+    volumes:
+      - "data:/var/testlink"
+    ports:
+      - "80:80"
+      - "443:443"
+
+volumes:
+  data:
+    

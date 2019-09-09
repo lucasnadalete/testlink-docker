@@ -1,0 +1,72 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: testlink-deployment
+  namespace: testlink
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: testlink-pod
+    spec: 
+      containers:
+        - image: lookyller/testlink:latest
+          name: container-testlink
+          ports:
+            - containerPort: 80
+          env:
+            - name: DB_TYPE
+              value: "mysql"
+            - name: DB_USER
+              value: "testlink"
+            - name: DB_PASS
+              value: "testlink@tech!@#"
+            - name: DB_HOST
+              value: "35.236.246.120"
+            - name: DB_NAME
+              value: "testlink"
+            - name: DB_TABLE_PREFIX
+              value: ""
+            - name: SMTP_ENABLE
+              value: ""
+            - name: SMTP_HOST
+              value: ""
+            - name: SMTP_PORT
+              value: ""
+            - name: SMTP_USER
+              value: ""
+            - name: SMTP_PASSWORD
+              value: ""
+            - name: SMTP_CONNECTION_MODE
+              value: "tls"
+            - name: CHECK_WARNING_MODE
+              value: "SILENT"
+            - name: PATH_TESTLINK_LOG
+              value: "/var/testlink/logs/"
+            - name: PATH_TESTLINK_UPLOAD_AREA
+              value: "/var/testlink/upload_area/"
+            - name: DEFAULT_LANGUAGE
+              value: "en-US"
+            - name: SESSION_INACTIVITY_TIMEOUT
+              value: "300"
+          volumeMounts:
+            - name: testlink-data
+              mountPath: /var/testlink
+          resources: 
+            requests:
+              memory: "256Mi"
+              cpu: "0.1"        
+            limits:
+              cpu: "0.3"
+              memory: "512Mi"
+          livenessProbe:
+            httpGet:
+              path: /testlink
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 30
+      volumes:
+        - name: testlink-data
+          persistentVolumeClaim:
+            claimName: testlink-volume

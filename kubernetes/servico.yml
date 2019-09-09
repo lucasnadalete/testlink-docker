@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: testlink-service
+  namespace: testlink
+spec:
+  type: LoadBalancer
+  selector:
+    name: testlink-pod
+  ports:
+    - port: 80
+      targetPort: 80
